@@ -1,0 +1,67 @@
+# @file      .gitlab-ci.yml
+# @author    Rodrigo Marcuzzi      [rmarcuzzi@uni-bonn.de]
+#
+# Copyright (c) 2020 Rodrigo Marcuzzi, all rights reserved
+stages:
+    - build
+    - test
+    - update
+
+build:
+    stage: build
+    image: debian:bullseye
+    variables:
+        GIT_SUBMODULE_STRATEGY: recursive
+        DEBIAN_FRONTEND: "noninteractive"
+    script:
+        - echo "Hello, $GITLAB_USER_LOGIN! let's build the raspbian ipb-car image"
+        - echo "Installing dependencies"
+        - apt-get update
+        - |
+            apt-get install -yqq \
+            bc \
+            coreutils \
+            curl \
+            debootstrap \
+            dosfstools \
+            file \
+            git \
+            gpg \
+            grep \
+            kmod \
+            kpartx \
+            libarchive-tools \
+            libcap2-bin \
+            parted \
+            pigz \
+            qemu-user-static \
+            qemu-utils \
+            quilt \
+            rsync \
+            xxd \
+            xz-utils \
+            zerofree \
+            zip 
+
+        - echo "Setting up build"
+        - dpkg-reconfigure qemu-user-static
+
+        - echo "Building image"
+        - /bin/bash build.sh
+
+    artifacts:
+        paths:
+            - pi-gen/deploy/*.zip
+        expire_in: 12 hour
+
+test:
+    stage: test
+    script:
+        - FILES=`ls -1 pi-gen/deploy/*.zip 2>/dev/null | wc -l` && [ $FILES = 0 ] && exit 1 || exit 0
+    dependencies:
+        - build
+
+include:
+  - project: "ipb-team/robots/ipb-car/meta-workspace"
+    ref: master
+    file: ".templates/.gitlab-ci-submodule-update.yml"

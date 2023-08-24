@@ -1,0 +1,10 @@
+[Unit]
+Description=Run ipbcar docker image
+After=docker.service
+
+[Service]
+Type=fork
+ExecStart=/usr/bin/bash /home/pi/ipbcar_docker.sh
+
+[Install]
+WantedBy=multi-user.target

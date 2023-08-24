@@ -1,0 +1,2 @@
+NOOBS_NAME="Raspberry Pi OS Lite (64-bit)"
+NOOBS_DESCRIPTION="A custom IPB-port of Debian with no desktop environment"
