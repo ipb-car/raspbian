@@ -1,0 +1,53 @@
+# @file      .gitlab-ci.yml
+# @author    Rodrigo Marcuzzi      [rmarcuzzi@uni-bonn.de]
+#
+# Copyright (c) 2020 Rodrigo Marcuzzi, all rights reserved
+stages:
+    - build
+
+build:
+    stage: build
+    image: debian:bullseye
+    variables:
+        GIT_SUBMODULE_STRATEGY: recursive
+        DEBIAN_FRONTEND: "noninteractive"
+    script:
+        - echo "Hello, $GITLAB_USER_LOGIN! let's build the raspbian ipb-car image"
+        - echo "Installing dependencies"
+        - apt-get update
+        - |
+            apt-get install -yqq \
+            bc \
+            coreutils \
+            curl \
+            debootstrap \
+            dosfstools \
+            file \
+            git \
+            gpg \
+            grep \
+            kmod \
+            kpartx \
+            libarchive-tools \
+            libcap2-bin \
+            parted \
+            pigz \
+            qemu-user-static \
+            qemu-utils \
+            quilt \
+            rsync \
+            xxd \
+            xz-utils \
+            zerofree \
+            zip 
+
+        - echo "Setting up build"
+        - dpkg-reconfigure qemu-user-static
+
+        - echo "Building image"
+        - /bin/bash build.sh
+
+    artifacts:
+        paths:
+            - deploy/*.zip
+        expire_in: 12 hour

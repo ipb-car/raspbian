@@ -1,0 +1,12 @@
+wget
+jq
+curl
+vim
+
+gpsd
+gpsd-clients
+pps-tools
+picocom
+chrony
+
+linuxptp

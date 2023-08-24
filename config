@@ -1,0 +1,10 @@
+IMG_NAME='ipb-Raspbian'
+USE_QCOW2=0
+USE_QEMU=0
+LOCALE_DEFAULT=en_US.UTF-8
+TIMEZONE_DEFAULT='Europe/Berlin'
+TARGET_HOSTNAME='ipbcar'
+FIRST_USER_NAME='pi'
+FIRST_USER_PASS='ipb-car'
+ENABLE_SSH=1
+STAGE_LIST="stage0 stage1 stage2 stageIPB"
